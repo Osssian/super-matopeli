@@ -47,7 +47,7 @@ def gameLoop():
 
         while game_close:
             display.fill(black)
-            message("Hävisit! Paina C jatkaaksesi tai Q poistuaksesi", red, width / 6, height / 3)
+            message("Pelaa uudestaam Hävisit! Paina C jatkaaksesi tai Q poistuaksesi", red, width / 6, height / 3)
             pygame.display.update()
             
             for event in pygame.event.get():
