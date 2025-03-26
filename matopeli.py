@@ -2,6 +2,7 @@ import pygame
 import time
 import random
 
+#ueeee
 # Pygame alustaminen
 pygame.init()
 
