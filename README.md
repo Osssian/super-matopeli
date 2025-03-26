@@ -9,13 +9,6 @@ Toteutettu `pygame`-kirjastolla ja julkaistu `.exe`-muodossa automaattisesti Git
 
 ---
 
-## Näyttökuva
-
-![Matopeli-näyttökuva](screenshots/matopeli.png)
-
-> Lisää `screenshots/matopeli.png`-kuvatiedosto projektiisi, jotta se näkyy GitHubissa.
-
----
 
 ## 🎮 Ohjeet
 
