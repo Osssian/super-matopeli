@@ -1,6 +1,4 @@
 import pygame
-import pytest
-import pytest_cov
 import time
 import random
 
