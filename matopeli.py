@@ -2,111 +2,126 @@ import pygame
 import time
 import random
 
-#ueeee
-# Pygame alustaminen
+# Alustetaan pygame
 pygame.init()
 
 # Värit
-white = (255, 255, 255)
-black = (0, 0, 0)
-red = (213, 50, 80)
-green = (0, 255, 0)
-blue = (50, 153, 213)
+valkoinen = (255, 255, 255)
+musta = (0, 0, 0)
+punainen = (213, 50, 80)
+vihreä = (0, 255, 0)
+sininen = (50, 153, 213)
 
 # Näytön koko
-width = 600
-height = 400
+leveys = 600
+korkeus = 400
 
-display = pygame.display.set_mode((width, height))
-pygame.display.set_caption("Matopeli")
+# Peli-ikkuna
+ruutu = pygame.display.set_mode((leveys, korkeus))
+pygame.display.set_caption('Matopeli 🐍')
 
-clock = pygame.time.Clock()
-snake_block = 10
-snake_speed = 15
+kello = pygame.time.Clock()
 
-font_style = pygame.font.SysFont("bahnschrift", 25)
-def message(msg, color, x, y):
-    mesg = font_style.render(msg, True, color)
-    display.blit(mesg, [x, y])
+# Madon palojen koko
+mato_blokin_koko = 10
+nopeus = 15
 
-def gameLoop():
-    game_over = False
-    game_close = False
+# Fontit
+fontti = pygame.font.SysFont("bahnschrift", 25)
+pistefontti = pygame.font.SysFont("comicsansms", 20)
 
-    x = width / 2
-    y = height / 2
-    x_change = 0
-    y_change = 0
+def pisteet(pisteet):
+    arvo = pistefontti.render("Pisteet: " + str(pisteet), True, musta)
+    ruutu.blit(arvo, [0, 0])
 
-    snake_list = []
-    length_of_snake = 1
+def mato(maton_palat):
+    for pala in maton_palat:
+        pygame.draw.rect(ruutu, vihreä, [pala[0], pala[1], mato_blokin_koko, mato_blokin_koko])
 
-    food_x = round(random.randrange(0, width - snake_block) / 10.0) * 10.0
-    food_y = round(random.randrange(0, height - snake_block) / 10.0) * 10.0
+def viesti(msg, väri):
+    teksti = fontti.render(msg, True, väri)
+    ruutu.blit(teksti, [leveys / 6, korkeus / 3])
 
-    while not game_over:
+def peli():
+    peli_päällä = True
+    peli_loppu = False
 
-        while game_close:
-            display.fill(black)
-            message("Pelaa uudestaam Hävisit! Paina C jatkaaksesi tai Q poistuaksesi", red, width / 6, height / 3)
+    x = leveys / 2
+    y = korkeus / 2
+
+    x_muutos = 0
+    y_muutos = 0
+
+    maton_pituus = 1
+    maton_palat = []
+
+    omena_x = round(random.randrange(0, leveys - mato_blokin_koko) / 10.0) * 10.0
+    omena_y = round(random.randrange(0, korkeus - mato_blokin_koko) / 10.0) * 10.0
+
+    while peli_päällä:
+
+        while peli_loppu:
+            ruutu.fill(valkoinen)
+            viesti("Pelaa peli uudestaan!  Enter = Uudestaan, Esc = Lopeta", punainen)
+            pisteet(maton_pituus - 1)
             pygame.display.update()
-            
-            for event in pygame.event.get():
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_q:
-                        game_over = True
-                        game_close = False
-                    if event.key == pygame.K_c:
-                        gameLoop()
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                game_over = True
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
-                    x_change = -snake_block
-                    y_change = 0
-                elif event.key == pygame.K_RIGHT:
-                    x_change = snake_block
-                    y_change = 0
-                elif event.key == pygame.K_UP:
-                    y_change = -snake_block
-                    x_change = 0
-                elif event.key == pygame.K_DOWN:
-                    y_change = snake_block
-                    x_change = 0
+            for tapahtuma in pygame.event.get():
+                if tapahtuma.type == pygame.KEYDOWN:
+                    if tapahtuma.key == pygame.K_ESCAPE:
+                        peli_päällä = False
+                        peli_loppu = False
+                    if tapahtuma.key == pygame.K_RETURN:
+                        peli()
 
-        if x >= width or x < 0 or y >= height or y < 0:
-            game_close = True
-        x += x_change
-        y += y_change
-        display.fill(blue)
-        pygame.draw.rect(display, green, [food_x, food_y, snake_block, snake_block])
-        
-        snake_head = []
-        snake_head.append(x)
-        snake_head.append(y)
-        snake_list.append(snake_head)
-        if len(snake_list) > length_of_snake:
-            del snake_list[0]
+        for tapahtuma in pygame.event.get():
+            if tapahtuma.type == pygame.QUIT:
+                peli_päällä = False
+            if tapahtuma.type == pygame.KEYDOWN:
+                if tapahtuma.key == pygame.K_LEFT:
+                    x_muutos = -mato_blokin_koko
+                    y_muutos = 0
+                elif tapahtuma.key == pygame.K_RIGHT:
+                    x_muutos = mato_blokin_koko
+                    y_muutos = 0
+                elif tapahtuma.key == pygame.K_UP:
+                    y_muutos = -mato_blokin_koko
+                    x_muutos = 0
+                elif tapahtuma.key == pygame.K_DOWN:
+                    y_muutos = mato_blokin_koko
+                    x_muutos = 0
 
-        for segment in snake_list[:-1]:
-            if segment == snake_head:
-                game_close = True
+        # Tarkistetaan reunat
+        if x >= leveys or x < 0 or y >= korkeus or y < 0:
+            peli_loppu = True
 
-        for segment in snake_list:
-            pygame.draw.rect(display, white, [segment[0], segment[1], snake_block, snake_block])
-        
+        x += x_muutos
+        y += y_muutos
+        ruutu.fill(sininen)
+
+        pygame.draw.rect(ruutu, punainen, [omena_x, omena_y, mato_blokin_koko, mato_blokin_koko])
+        maton_palat.append([x, y])
+        if len(maton_palat) > maton_pituus:
+            del maton_palat[0]
+
+        # Osuma omaan häntään
+        for pala in maton_palat[:-1]:
+            if pala == [x, y]:
+                peli_loppu = True
+
+        mato(maton_palat)
+        pisteet(maton_pituus - 1)
+
         pygame.display.update()
 
-        if x == food_x and y == food_y:
-            food_x = round(random.randrange(0, width - snake_block) / 10.0) * 10.0
-            food_y = round(random.randrange(0, height - snake_block) / 10.0) * 10.0
-            length_of_snake += 1
+        if x == omena_x and y == omena_y:
+            omena_x = round(random.randrange(0, leveys - mato_blokin_koko) / 10.0) * 10.0
+            omena_y = round(random.randrange(0, korkeus - mato_blokin_koko) / 10.0) * 10.0
+            maton_pituus += 1
 
-        clock.tick(snake_speed)
+        kello.tick(nopeus)
 
     pygame.quit()
     quit()
 
-gameLoop()
+peli()
