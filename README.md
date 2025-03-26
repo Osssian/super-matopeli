@@ -63,7 +63,7 @@ pyinstaller --onefile matopeli.py
 
 ##  Kehittäjä
 
-[GitHub: nilenos](https://github.com/Osssian)
+[GitHub: Osssian](https://github.com/Osssian)
 
 Ota yhteyttä parannusehdotusten tai kysymysten osalta!
 
