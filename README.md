@@ -5,8 +5,6 @@ Toteutettu `pygame`-kirjastolla ja julkaistu `.exe`-muodossa automaattisesti Git
 
 [Lataa uusin versio](https://github.com/Osssian/super-matopeli/releases/tag/v1.0.2)
 
-[![GitHub release](https://img.shields.io/github/v/tag/nilenos/super-matopeli?label=versio)](https://github.com/Osssian/super-matopeli/releases)
-
 ---
 
 
